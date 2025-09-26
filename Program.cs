@@ -11,7 +11,6 @@ namespace UpdateDebian
     {
         private static readonly IArgsParser _argsParser = new ArgsParser();
         private static readonly IDebianVersionParser<DebianVersion> _debianVersionParser = new DebianVersionParser();
-        private static readonly string[] ValidActions = new[] { Actions.CheckBackports, Actions.Update };
         private static readonly string[] SupportedVersions = new[] { "12", "13"};
 
         public static async Task Main(string[] args)
@@ -32,10 +31,6 @@ namespace UpdateDebian
                 }
 
                 var action = _argsParser.GetAction(args);
-                if (!ValidActions.Contains(action))
-                {
-                    throw new Exception($"Invalid action specified: {action}.{Environment.NewLine}Valid actions are:{Environment.NewLine}{string.Join(Environment.NewLine, ValidActions)}");
-                }
 
                 var handler = GetActionHandler(action);
                 await handler.HandleAsync(version);
@@ -51,7 +46,7 @@ namespace UpdateDebian
             return action switch
             {
                 Actions.CheckBackports => new CheckBackportsActionHandler(),
-                Actions.Update => new UpdateActionHandler(),
+                Actions.Upgrade => new UpgradeActionHandler(),
                 _ => throw new Exception($"Invalid action specified: {action}")
             };
         }

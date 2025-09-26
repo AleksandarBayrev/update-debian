@@ -8,7 +8,7 @@ namespace UpdateDebian.Services
         {
             if (args.Length != 1)
             {
-                throw new Exception($"No action specified, valid actions are: {Environment.NewLine}check-backports{Environment.NewLine}update");
+                throw new Exception($"No action specified, valid actions are:{Environment.NewLine}{string.Join(Environment.NewLine, Actions.ValidActions)}");
             }
 
             return args[0];

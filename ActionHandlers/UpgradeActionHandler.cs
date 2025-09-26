@@ -4,7 +4,7 @@ using UpdateDebian.Models;
 
 namespace UpdateDebian.ActionHandlers
 {
-    public class UpdateActionHandler : IActionHandler<DebianVersion>
+    public class UpgradeActionHandler : IActionHandler<DebianVersion>
     {
         public async Task HandleAsync(DebianVersion debianVersion)
         {
