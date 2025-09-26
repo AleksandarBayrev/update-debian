@@ -1,6 +1,6 @@
 make:
 	@echo 'Compiling the project...'
-	@dotnet publish -c Release -r linux-x64 -o ./out
+	@dotnet publish -c Release -r linux-x64 --property:PublishDir=./out
 	@echo 'Done, the compiled files are in the out/ directory.'
 	@echo 'Run "make install" to install the scripts to /usr/bin'
 
