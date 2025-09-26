@@ -1,10 +1,12 @@
 make:
-	@echo 'Use make install command to install the scripts and make uninstall to remove it'
+	@echo 'Compiling the project...'
+	@dotnet publish -c Release -r linux-x64 -o ./out
+	@echo 'Done, the compiled files are in the out/ directory.'
+	@echo 'Run "make install" to install the scripts to /usr/bin'
 
 install:
 	@echo 'Installing the scripts to /usr/bin'
-	@sudo cp ./update-debian /usr/bin
-	@sudo cp ./check-debian-backports /usr/bin
+	@sudo cp ./out/update-debian /usr/bin
 	@echo 'Done, run update-debian or check-debian-backports from any location.'
 
 uninstall:
