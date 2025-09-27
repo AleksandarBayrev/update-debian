@@ -5,5 +5,8 @@
 * Run `make install` to install the scripts
 
 ## How to use the scripts
-* `update-debian` - run it to update the system
-* `check-debian-backports` - run it to see if any packages are present in the backports reop, install them via `sudo apt install -t yourversion-backports your-package`
+* `check-updates` - checks for available updates.
+* `upgrade` - upgrades the current version system packages.
+* `check-backports` - checks for updates in the backports repository, install them via `sudo apt install -t yourversion-backports your-package`
+
+## Future plans - add a command to install packages from backports
