@@ -8,7 +8,8 @@ namespace UpdateDebian.ActionHandlers
     {
         public async Task HandleAsync(DebianVersion debianVersion)
         {
-            await Console.Out.WriteLineAsync("Checking for updates for system...");
+            await Console.Out.WriteLineAsync("Checking for system updates...");
+
             var checkUpdatesProcess = Process.Start(new ProcessStartInfo
             {
                 FileName = "apt",

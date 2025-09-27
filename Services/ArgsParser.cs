@@ -6,8 +6,9 @@ namespace UpdateDebian.Services
     {
         private static Exception GetErrorMessage()
         {
-            return new Exception($"No action specified, valid actions are:{Environment.NewLine}{string.Join(Environment.NewLine, Actions.ValidActions)}");
+            return new Exception($"No valid action specified, valid actions are:{Environment.NewLine}{string.Join(Environment.NewLine, Actions.ValidActions.Select(kv => $" - {kv.Key}: {kv.Value}"))}");
         }
+
         public string GetAction(string[] args)
         {
             if (args.Length != 1)
@@ -15,7 +16,7 @@ namespace UpdateDebian.Services
                 throw GetErrorMessage();
             }
 
-            if (args[0] is null || !Actions.ValidActions.Contains(args[0]))
+            if (args[0] is null || !Actions.ValidActions.Keys.Contains(args[0]))
             {
                 throw GetErrorMessage();
             }
