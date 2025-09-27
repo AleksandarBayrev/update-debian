@@ -25,6 +25,15 @@ namespace UpdateDebian.ActionHandlers
                 return;
             }
 
+            await checkUpdatesProcess.WaitForExitAsync();
+
+            var hasErrors = await Helpers.GetErrorOutput(checkUpdatesProcess);
+
+            if (!string.IsNullOrWhiteSpace(hasErrors))
+            {
+                throw new Exception($"Error while checking for updates: {hasErrors}");
+            }
+
             var updateSystemProcess = Process.Start(new ProcessStartInfo
             {
                 FileName = "apt",
@@ -46,16 +55,14 @@ namespace UpdateDebian.ActionHandlers
 
             await updateSystemProcess.WaitForExitAsync();
 
-            if (updateSystemProcess.ExitCode == 0)
-            {
-                await Console.Out.WriteLineAsync("System updated successfully.");
-                await Console.Out.WriteLineAsync(output);
-            }
-            else
+            if (updateSystemProcess.ExitCode != 0)
             {
                 await Console.Out.WriteLineAsync("Failed to update the system.");
                 await Console.Out.WriteLineAsync(error);
+                return;
             }
+
+            await Console.Out.WriteLineAsync(output);
         }
     }
 }
