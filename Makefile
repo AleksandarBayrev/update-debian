@@ -1,5 +1,6 @@
 make:
 	@echo 'Compiling the project...'
+	@git clean -fxd
 	@dotnet clean
 	@dotnet publish -c Release -r linux-x64 --property:PublishDir=./out
 	@echo 'Done, the compiled files are in the out/ directory.'
