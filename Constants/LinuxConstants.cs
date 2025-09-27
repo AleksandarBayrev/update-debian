@@ -4,5 +4,6 @@ namespace UpdateDebian.Constants
     {
         public const string RootUsername = "root";
         public const string OsReleaseFilePath = "/etc/os-release";
+        public static readonly string[] SupportedVersions = new[] { "12", "13"};
     }
 }
