@@ -1,3 +1,4 @@
+using System.Text;
 using UpdateDebian.Interfaces;
 
 namespace UpdateDebian.Services
@@ -6,7 +7,17 @@ namespace UpdateDebian.Services
     {
         private static Exception GetErrorMessage()
         {
-            return new Exception($"No valid action specified, valid actions are:{Environment.NewLine}{string.Join(Environment.NewLine, Actions.ValidActions.Select(kv => $" - {kv.Key}: {kv.Value}"))}");
+            var sb = new StringBuilder();
+
+            sb.AppendLine("usage: `update-debian [action]`");
+            sb.AppendLine("Valid actions are:");
+
+            foreach (var action in Actions.ValidActions)
+            {
+                sb.AppendLine($" - {action.Key}: {action.Value}");
+            }
+
+            return new Exception(sb.ToString());
         }
 
         public string GetAction(string[] args)
