@@ -60,7 +60,9 @@ namespace UpdateDebian.ActionHandlers
             await listUpdatesProcess.WaitForExitAsync();
 
             var output = await listUpdatesProcess.StandardOutput.ReadToEndAsync();
-            await Console.Out.WriteLineAsync(output);
+            await Console.Out.WriteLineAsync(
+                string.Join(Environment.NewLine, output.Split(Environment.NewLine).Where(x => x.Contains("-backports")))
+            );
 
         }
 
