@@ -60,8 +60,17 @@ namespace UpdateDebian.ActionHandlers
             await listUpdatesProcess.WaitForExitAsync();
 
             var output = await listUpdatesProcess.StandardOutput.ReadToEndAsync();
+            var backportsUpdatedPackagesList = output.Split(Environment.NewLine).Where(x => x.Contains("-backports"));
+
+            if (!backportsUpdatedPackagesList.Any())
+            {
+                await Console.Out.WriteLineAsync("No packages have newer versions in backports.");
+                return;
+            }
+
+            await Console.Out.WriteLineAsync("The following packages have newer versions in backports:");
             await Console.Out.WriteLineAsync(
-                string.Join(Environment.NewLine, output.Split(Environment.NewLine).Where(x => x.Contains("-backports")))
+                string.Join(Environment.NewLine, backportsUpdatedPackagesList)
             );
 
         }
