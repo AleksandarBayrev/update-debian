@@ -5,11 +5,13 @@ namespace UpdateDebian
         public const string CheckUpdates = "check-updates";
         public const string CheckBackports = "check-backports";
         public const string Upgrade = "upgrade";
+        public const string History = "history";
         public static readonly IDictionary<string, string> ValidActions = new Dictionary<string, string>
         {
             { CheckUpdates, "checks for available updates." },
             { Upgrade, "upgrades the current version system packages." },
             { CheckBackports, "checks for updates in the backports repository." },
+            { History, "returns history of the transactions (add, update, delete)" }
         };
     }
 }

@@ -53,6 +53,7 @@ namespace UpdateDebian
                 Actions.CheckBackports => new CheckBackportsActionHandler(),
                 Actions.Upgrade => new UpgradeActionHandler(),
                 Actions.CheckUpdates => new CheckUpdatesActionHandler(),
+                Actions.History => new HistoryActionHandler(),
                 _ => throw new Exception($"Invalid action specified: {action}")
             };
         }
