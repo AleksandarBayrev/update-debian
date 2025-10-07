@@ -14,6 +14,8 @@ namespace UpdateDebian.ActionHandlers
                     await File.ReadAllLinesAsync(Path.GetFullPath(Constants.LinuxConstants.AptHistoryFile))
                 )
             );
+
+            //TODO: Add grouping for each type - install, update, remove and present them
         }
     }
 }
