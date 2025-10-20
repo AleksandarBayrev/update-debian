@@ -1,13 +1,14 @@
 SCRIPT_SRC = update-debian
-
 SCRIPT_NAME = update-debian
-
 INSTALL_DIR = /usr/bin
+PROJECT_NAME = $(SCRIPT_NAME)
+VERSION := $(shell date +%Y%m%d)
+RELEASE_ARCHIVE = $(PROJECT_NAME)-$(VERSION).tar.gz
 
 .PHONY: install uninstall
 
 make:
-	@echo "Available commands:\ninstall\nuninstall"
+	@echo "Available commands:\ninstall\nuninstall\nrelease\nclean"
 
 install:
 	@# Check if user is root
@@ -32,3 +33,14 @@ uninstall:
 	@# Remove the installed script
 	@rm -f $(INSTALL_DIR)/$(SCRIPT_NAME)
 	@echo "Uninstall complete."
+
+release:
+	@echo "Creating release archive: $(RELEASE_ARCHIVE)"
+	@# Bundle the script and the Makefile into a .tar.gz file
+	@tar czvf $(RELEASE_ARCHIVE) $(SCRIPT_SRC) Makefile
+	@echo "Release bundle created successfully."
+
+clean:
+	@echo "Cleaning up generated release files..."
+	@rm -f $(RELEASE_ARCHIVE)
+	@echo "Cleanup complete."

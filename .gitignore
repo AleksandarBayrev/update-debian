@@ -1,4 +1,1 @@
-# .NET
-bin/
-obj/
-out/
+*.tar.gz
