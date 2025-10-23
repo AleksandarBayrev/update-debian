@@ -22,13 +22,13 @@ fi
 
 echo 'Performing system update'
 sudo apt update
-sudo apt upgrade -y
+sudo apt dist-upgrade -y
 
 if command -v lsb_release &> /dev/null; then
     if grep -r "backports" /etc/apt/sources.list* &> /dev/null; then
         CODENAME=$(lsb_release -cs)
         echo "Backports detected. Performing backports upgrade for $CODENAME."
-        sudo apt upgrade -t "${CODENAME}-backports" -y
+        sudo apt dist-upgrade -t "${CODENAME}-backports" -y
     fi
 fi
 
