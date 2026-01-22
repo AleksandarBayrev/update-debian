@@ -1,10 +1,34 @@
 #!/bin/bash
+# Script to update Debian systems with optional backports support
+
+# Configurations
+CONFIG_FILE="/etc/update-debian/configuration"
+CONFIG_DIR="/etc/update-debian"
+
 handle_interrupt() {
     echo ""
     echo "Script interrupted by user. Exiting..."
     exit 130
 }
+
 trap handle_interrupt SIGINT SIGTERM
+
+set_backports_pref() {
+    sudo mkdir -p "$CONFIG_DIR"
+    echo "USE_BACKPORTS=$1" | sudo tee "$CONFIG_FILE" > /dev/null
+    echo "Configuration updated: USE_BACKPORTS=$1"
+    echo "Please re-run the script use the applied changes."
+    exit 0
+}
+
+case "$1" in
+    --enable-backports)
+        set_backports_pref "true"
+        ;;
+    --disable-backports)
+        set_backports_pref "false"
+        ;;
+esac
 
 distroCheckOne=$(cat /etc/os-release | grep -i "NAME=\"Debian GNU/Linux\"")
 distroCheckTwo=$(cat /etc/debian_version 2>/dev/null)
@@ -20,9 +44,6 @@ then
    echo "This script must be run as root. Try 'sudo update-debian'" 1>&2
    exit 1
 fi
-
-CONFIG_FILE="/etc/update-debian/configuration"
-CONFIG_DIR="/etc/update-debian"
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Configuration file not found."
