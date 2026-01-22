@@ -46,7 +46,7 @@ then
 fi
 
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "Configuration file not found."
+    echo "Configuration file $CONFIG_FILE not found."
     read -p "Would you like to enable Debian Backports for future updates? (y/n) " pref_choice
     sudo mkdir -p "$CONFIG_DIR"
     if [[ "$pref_choice" =~ ^[Yy]$ ]]; then
