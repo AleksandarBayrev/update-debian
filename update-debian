@@ -15,21 +15,58 @@ then
     exit 0
 fi
 
-if [ "$(id -u)" != "0" ]; then
+if [ "$(id -u)" != "0" ];
+then
    echo "This script must be run as root. Try 'sudo update-debian'" 1>&2
    exit 1
 fi
 
+CONFIG_FILE="/etc/update-debian/configuration"
+CONFIG_DIR="/etc/update-debian"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Configuration file not found."
+    read -p "Would you like to enable Debian Backports for future updates? (y/n) " pref_choice
+    sudo mkdir -p "$CONFIG_DIR"
+    if [[ "$pref_choice" =~ ^[Yy]$ ]]; then
+        echo "USE_BACKPORTS=true" | sudo tee "$CONFIG_FILE" > /dev/null
+    else
+        echo "USE_BACKPORTS=false" | sudo tee "$CONFIG_FILE" > /dev/null
+    fi
+fi
+
+source "$CONFIG_FILE"
+if [[ "$USE_BACKPORTS" == "true" ]]; then
+    echo "--- Mode: Debian Backports ENABLED ---"
+else
+    echo "--- Mode: Standard Debian Updates (Backports Disabled) ---"
+fi
+
 echo 'Performing system update'
 sudo apt update
-sudo apt dist-upgrade -y
 
-if command -v lsb_release &> /dev/null; then
-    if grep -r "backports" /etc/apt/sources.list* &> /dev/null; then
-        CODENAME=$(lsb_release -cs)
-        echo "Backports detected. Performing backports upgrade for $CODENAME."
-        sudo apt dist-upgrade -t "${CODENAME}-backports" -y
+if ! command -v lsb_release &> /dev/null;
+then
+    sudo apt install lsb-release -y
+fi
+
+if [[ "$USE_BACKPORTS" == "true" ]] && command -v lsb_release &> /dev/null;
+then
+    CODENAME=$(lsb_release -cs)
+    
+    # Add repository if missing
+    if ! grep -r "backports" /etc/apt/sources.list* &> /dev/null;
+    then
+        echo "Adding backports to /etc/apt/sources.list.d/backports.list..."
+        echo "deb http://deb.debian.org/debian ${CODENAME}-backports main contrib non-free" | sudo tee /etc/apt/sources.list.d/backports.list
+        sudo apt update
     fi
+    
+    echo "Performing backports upgrade for $CODENAME."
+    sudo apt dist-upgrade -t "${CODENAME}-backports" -y
+else
+    echo "Backports disabled or unavailable. Performing standard distribution upgrade."
+    sudo apt dist-upgrade -y
 fi
 
 sudo apt autoremove -y
@@ -47,11 +84,11 @@ then
 fi
 
 echo "Update complete."
-
 REBOOT_RECOMMENDED=false
 PROMPT_MSG="Do you want to reboot now?"
 
-if [ -f /var/run/reboot-required ]; then
+if [ -f /var/run/reboot-required ];
+then
     echo "A reboot is recommended by the system."
     REBOOT_RECOMMENDED=true
     PROMPT_MSG="Do you want to reboot now? (reboot is recommended)"
