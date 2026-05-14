@@ -76,11 +76,11 @@ then
     CODENAME=$(lsb_release -cs)
     
     # Add repository if missing
-    if ! grep -r "backports" /etc/apt/sources.list* &> /dev/null;
+    if ! grep -r "${CODENAME}-backports" /etc/apt/sources.list* &> /dev/null;
     then
-        echo "Adding backports to /etc/apt/sources.list.d/backports.list..."
-        echo "deb http://deb.debian.org/debian ${CODENAME}-backports main contrib non-free" | sudo tee /etc/apt/sources.list.d/backports.list
-        sudo apt update
+        echo "Error: Backports is enabled in config, but the repository is missing from your system." >&2
+        echo "Please add the '${CODENAME}-backports' repository to your /etc/apt/sources.list.d/ files." >&2
+        exit 1
     fi
     
     echo "Performing backports upgrade for $CODENAME."
