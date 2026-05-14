@@ -42,6 +42,11 @@ case "$1" in
     --disable-backports)
         set_backports_pref "false"
         ;;
+    *)
+        echo "Error: Unrecognized option '$1'" >&2
+        echo "Use --help to see available options." >&2
+        exit 1
+        ;;
 esac
 
 
