@@ -21,7 +21,21 @@ set_backports_pref() {
     exit 0
 }
 
+show_help() {
+    echo "Usage: update-debian [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help              Show this help message and exit"
+    echo "  --enable-backports      Enable Debian Backports for future updates"
+    echo "  --disable-backports     Disable Debian Backports for future updates"
+    exit 0
+}
+
+# Argument Parsing
 case "$1" in
+    -h|--help)
+        show_help
+        ;;
     --enable-backports)
         set_backports_pref "true"
         ;;
@@ -29,6 +43,7 @@ case "$1" in
         set_backports_pref "false"
         ;;
 esac
+
 
 distroCheckOne=$(cat /etc/os-release | grep -i "NAME=\"Debian GNU/Linux\"")
 distroCheckTwo=$(cat /etc/debian_version 2>/dev/null)
