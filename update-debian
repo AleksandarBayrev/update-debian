@@ -32,22 +32,24 @@ show_help() {
 }
 
 # Argument Parsing
-case "$1" in
-    -h|--help)
-        show_help
-        ;;
-    --enable-backports)
-        set_backports_pref "true"
-        ;;
-    --disable-backports)
-        set_backports_pref "false"
-        ;;
-    *)
-        echo "Error: Unrecognized option '$1'" >&2
-        echo "Use --help to see available options." >&2
-        exit 1
-        ;;
-esac
+if [[ -n "$1" ]]; then
+    case "$1" in
+        -h|--help)
+            show_help
+            ;;
+        --enable-backports)
+            set_backports_pref "true"
+            ;;
+        --disable-backports)
+            set_backports_pref "false"
+            ;;
+        *)
+            echo "Error: Unrecognized option '$1'" >&2
+            echo "Use --help to see available options." >&2
+            exit 1
+            ;;
+    esac
+fi
 
 
 distroCheckOne=$(cat /etc/os-release | grep -i "NAME=\"Debian GNU/Linux\"")
